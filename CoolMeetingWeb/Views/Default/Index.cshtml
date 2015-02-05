@@ -5,11 +5,21 @@
 <div class="jumbotron">
     <h2>ASP.NET MVC会议预定系统</h2>
     <p class="lead">
+        如果是第一次运行该程序，请先点击下面的按钮以"生成初始数据库"
+        <br />
+        如果数据库已经生成，请点击右上角的"登录"链接进入系统
+        <br />
         管理员登录用户名:admin，密码：admin
         <br />
         要使用普通账号，请先"注册"，并且激活该账号
     </p>
-    <p><a href="/Account/Login" class="btn btn-primary btn-lg">立即登录 &raquo;</a></p>
+    <p>
+        @using(Html.BeginForm())
+        {
+            <button type="submit" class="btn btn-primary btn-lg">生成初始数据库 &raquo;</button>
+            @ViewBag.Result
+        }
+    </p>
 </div>
 
 <div class="row">

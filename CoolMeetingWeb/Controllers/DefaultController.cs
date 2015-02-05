@@ -1,4 +1,7 @@
-﻿using System.Web.Mvc;
+﻿using System.Data.Entity;
+using System.Linq;
+using CoolMeetingWeb.Models;
+using System.Web.Mvc;
 
 namespace CoolMeetingWeb.Controllers
 {
@@ -6,6 +9,18 @@ namespace CoolMeetingWeb.Controllers
     {
         public ActionResult Index()
         {
+            return View();
+        }
+
+        [HttpPost]
+        [ActionName("Index")]
+        public ActionResult IndexPost()
+        {
+            using(CoolMeetingDbContext db = new CoolMeetingDbContext())
+            {
+                db.Departments.ToList();
+            }
+            ViewBag.Result = "数据库生成成功！";
             return View();
         }
     }
