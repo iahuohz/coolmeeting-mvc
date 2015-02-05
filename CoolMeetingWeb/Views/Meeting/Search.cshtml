@@ -1,0 +1,88 @@
+﻿@using CoolMeetingWeb.ViewModels
+@using CoolMeetingWeb.Extensions
+
+@model IEnumerable<CoolMeetingWeb.Models.Meeting>
+
+@{
+    ViewBag.Title = "会议";
+}
+
+<h2>会议信息列表</h2>
+
+@using (Html.BeginForm("Search", "Meeting", FormMethod.Get))
+{
+    <div class="form-inline">
+        <div class="form-group">
+            @Html.TextBox("meetingName", "", new { @class = "form-control", placeholder = "会议名称" })
+        </div>
+        <div class="form-group">
+            @Html.TextBox("reservationistName", "", new { @class = "form-control", placeholder = "预定者姓名" })
+        </div>
+        <div class="form-group">
+            @Html.TextBox("fromDate", "", new { @class = "form-control", placeholder = "起始查找日期", id = "txtFromDate" })
+        </div>
+        <div class="form-group">
+            @Html.TextBox("toDate", "", new { @class = "form-control", placeholder = "终止查找日期", id = "txtToDate" })
+        </div>
+        <div class="form-group">
+            状态：
+            <label class="checkbox-inline">
+                @Html.CheckBox("canceled") 撤销的会议
+            </label>
+        </div>
+        <div class="form-group">
+            <button type="submit" class="btn btn-primary">查询</button>
+        </div>
+    </div>
+}
+
+<table class="table">
+    <caption>
+        <div class="table-pager">
+            @Html.Partial("_PagedNavigator", (PagedNavigatorViewModel)ViewBag.PagedNavigatorModel)
+        </div>
+    </caption>
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.MeetingName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.ReservationistID)
+        </th>
+        <th>
+            @Html.SortableActionLinkFor(model => model.StartTime, "Search")
+        </th>
+        <th>
+            @Html.SortableActionLinkFor(model => model.ReservationTime, "Search")
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.RoomID)
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.MeetingName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Reservationist.EmployeeName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.StartTime)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ReservationTime)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.RoomReserved.RoomCode)
+            </td>
+            <td>
+                @Html.ActionLink("详情", "Details", new { id = item.MeetingID }, new { @class = "btn btn-xs btn-primary" })
+            </td>
+        </tr>
+    }
+</table>
+

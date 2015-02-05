@@ -1,0 +1,56 @@
+﻿@using CoolMeetingWeb.ViewModels
+@model LoginViewModel
+@{
+    ViewBag.Title = "登录";
+}
+
+<h2>用户登录</h2>
+<div class="row">
+    <div class="col-md-8">
+        <section id="loginForm">
+            @using (Html.BeginForm("Login", "Account", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+            {
+                @Html.AntiForgeryToken()
+                <legend>账号信息</legend>
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                <div class="form-group">
+                    @Html.LabelFor(m => m.AccountName, new { @class = "col-md-2 control-label" })
+                    <div class="col-md-4">
+                        @Html.TextBoxFor(m => m.AccountName, new { @class = "form-control", placeholder="用户名或电子邮件地址" })
+                    </div>
+                    <div class="form-control-static">
+                        @Html.ValidationMessageFor(m => m.AccountName)
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(m => m.Password, new { @class = "col-md-2 control-label" })
+                    <div class="col-md-4">
+                        @Html.PasswordFor(m => m.Password, new { @class = "form-control" })
+                    </div>
+                    <div class="form-control-static">
+                        @Html.ValidationMessageFor(m => m.Password)
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-offset-2 col-md-4">
+                        <div class="checkbox">
+                            @Html.CheckBoxFor(m => m.RememberMe)
+                            @Html.LabelFor(m => m.RememberMe)
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-offset-2 col-md-4">
+                        <input type="submit" value="登录" class="btn btn-primary" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-offset-2 col-md-4">
+                        @Html.ActionLink("注册新用户", "Register", null, new { @class = "btn btn-xs btn-success" })
+                        @Html.ActionLink("忘记密码?", "ForgotPassword", null, new { @class = "btn btn-xs btn-warning" })
+                    </div>
+                </div>                
+            }
+        </section>
+    </div>
+</div>

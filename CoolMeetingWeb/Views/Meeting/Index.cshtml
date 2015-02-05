@@ -1,0 +1,15 @@
+﻿@{
+    ViewBag.Title = "会议";
+}
+
+<h2>会议列表</h2>
+
+<p>
+    @Html.ActionLink("预定会议", "Create", null, new { @class = "btn btn-primary" }) 
+</p>
+
+@{
+    Html.RenderAction("MeetingList", new { type = "reserved" });
+    Html.RenderAction("MeetingList");
+    Html.RenderAction("MeetingList", new { type = "canceled" }); 
+}

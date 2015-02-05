@@ -1,0 +1,141 @@
+﻿@using CoolMeetingWeb.ViewModels
+@using CoolMeetingWeb.Extensions
+
+@model IEnumerable<CoolMeetingWeb.Models.Employee>
+
+@{
+    ViewBag.Title = "员工";
+}
+
+<h2>员工信息列表</h2>
+
+@using(Html.BeginForm("Index", "Employee", FormMethod.Get))
+{
+    <div class="form-inline">
+        <div class="form-group">
+            @Html.TextBox("employeeName", "", new { @class = "form-control", placeholder = "姓名" })
+        </div>
+        <div class="form-group">
+            @Html.TextBox("userName", "", new { @class = "form-control", placeholder = "用户名"})
+        </div>
+        <div class="form-group">
+            @Html.TextBox("email", "", new { @class = "form-control", placeholder = "电子邮件" })
+        </div>
+        <div class="form-group">
+            @Html.DropDownList("department", (IEnumerable<SelectListItem>)ViewBag.Departments, "所有部门", 
+                new { @class = "form-control" })
+        </div>
+        <div class="form-group">
+            状态：
+            <label class="radio-inline">
+                @Html.RadioButton("status", 0, true) 活动
+            </label>
+            <label class="radio-inline">
+                @Html.RadioButton("status", 1) 已删除
+            </label>
+        </div>
+        <div class="form-group">
+            <button type="submit" class="btn btn-primary">查询</button>
+        </div>
+    </div>
+}
+
+@using (Html.BeginForm("Delete", "Employee", FormMethod.Post, new { id = "frmDelete" }))
+{ 
+    <table class="table">
+        <caption>
+            <div class="table-pager">
+                @Html.Partial("_PagedNavigator", (PagedNavigatorViewModel)ViewBag.PagedNavigatorModel)
+            </div>
+        </caption>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Department.DepartmentName)
+            </th>
+            <th>
+                @Html.SortableActionLinkFor(model => model.EmployeeName, "Index")
+            </th>
+            <th>
+                @Html.SortableActionLinkFor(model => model.UserName, "Index")
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Email)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Gender)
+            </th>
+            <th></th>
+        </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Department.DepartmentName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.EmployeeName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.UserName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Email)
+            </td>
+            <td>
+                @CoolMeetingWeb.Models.TermDescription.Gender[(int)item.Gender]
+            </td>
+            <td>
+                @if(!item.IsDeleted)
+                {
+                    @Html.ActionLink("编辑", "Edit", new { id = item.EmployeeID }, new { @class = "btn btn-xs btn-primary" }) 
+                    @:|
+                    <button type="button" id="btnDelete" 
+                            onclick="deleteEmployee(@item.EmployeeID, '@item.EmployeeName')" 
+                            class="btn btn-xs btn-primary">删除</button>
+                }
+                else
+                {
+                    @Html.ActionLink("详情", "Details", new { id = item.EmployeeID }, new { @class = "btn btn-xs btn-primary" })
+                }
+            </td>
+        </tr>
+    }
+    </table>
+}
+
+@section Scripts
+{
+    <script src="~/Scripts/bootbox.min.js"></script>
+    <script>
+        function deleteEmployee(empID, empName){
+            var msg = "确定要删除【" + empName + "】吗？"
+            bootbox.confirm(msg, function (chosen) {
+                if (chosen) {
+                    var data = {};
+                    data.id = empID;
+                    var jsonStr = JSON.stringify(data);
+                    $.ajax({
+                        url: "/Employee/Delete",
+                        type: "post",
+                        contentType: "application/json",
+                        data: jsonStr,
+                        dataType: "json",
+                        success: function (data) {
+                            if (data) {
+                                bootbox.alert("删除成功！", function () {
+                                    window.location.reload(true);
+                                });
+                            } else {
+                                bootbox.alert("删除失败！")
+                            }
+                        },
+                        error: function (data) {
+                            bootbox.alert(data.statusText);
+                        }
+                    });
+                }
+            });
+        }
+    </script>
+}

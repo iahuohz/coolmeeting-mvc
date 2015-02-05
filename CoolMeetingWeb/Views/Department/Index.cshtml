@@ -1,0 +1,33 @@
+﻿@model IEnumerable<CoolMeetingWeb.Models.Department>
+
+@{
+    ViewBag.Title = "部门";
+}
+
+<h2>所有部门</h2>
+
+<p>
+    @Html.ActionLink("新增部门", "Create", null, new { @class = "btn btn-primary" })
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.DepartmentName)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.DepartmentName)
+        </td>
+        <td>
+            @Html.ActionLink("编辑", "Edit", new { id=item.DepartmentID }, new {@class = "btn btn-xs btn-primary"}) |
+            @Html.ActionLink("查看员工", "Details", new { id = item.DepartmentID }, new { @class = "btn btn-xs btn-primary" }) |
+            @Html.ActionLink("删除", "Delete", new { id = item.DepartmentID }, new { @class = "btn btn-xs btn-primary" })
+        </td>
+    </tr>
+}
+
+</table>

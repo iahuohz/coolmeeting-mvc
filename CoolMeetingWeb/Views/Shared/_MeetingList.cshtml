@@ -1,0 +1,49 @@
+﻿@model IEnumerable<CoolMeetingWeb.Models.Meeting>
+
+<label class="alert alert-success">@ViewData["Caption"].ToString()</label>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.MeetingName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.NumberOfParticipants)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.RoomID)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.StartTime)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.EndTime)
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.MeetingName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.NumberOfParticipants)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.RoomReserved.RoomCode)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.StartTime)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.EndTime)
+            </td>
+            <td>
+                @Html.ActionLink("取消会议", "Delete", new { id = item.MeetingID }, new { @class = "btn btn-xs btn-primary" }) |
+                @Html.ActionLink("详情", "Details", new { id = item.MeetingID }, new { @class = "btn btn-xs btn-primary" })
+            </td>
+        </tr>
+    }
+
+</table>

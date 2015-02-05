@@ -1,0 +1,86 @@
+﻿@using CoolMeetingWeb.Models
+@model IEnumerable<CoolMeetingWeb.Models.Room>
+
+@{
+    ViewBag.Title = "会议室";
+}
+
+<h2>所有会议室</h2>
+
+<p>
+    @Html.ActionLink("新增会议室", "Create", null, new { @class = "btn btn-primary" })
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.RoomCode)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.RoomName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Capacity)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Descrption)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.RoomStatus)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.RoomCode)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.RoomName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Capacity)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Descrption)
+        </td>
+        <td>
+            @{
+                var status = CoolMeetingWeb.Models.TermDescription.RoomStatus[(int)(item.RoomStatus)];
+                switch (item.RoomStatus)
+                {
+                    case RoomStatusType.Active:
+                        <span class="label label-success">@status</span>
+                        break;
+                    case RoomStatusType.Maintained:
+                        <span class="label label-warning">@status</span>    
+                        break;
+                    case RoomStatusType.Retired:       
+                        <span class="label label-danger">@status</span>
+                        break;
+                }
+            }
+        </td>
+        <td>
+            @{
+                switch (item.RoomStatus)
+                {
+                    case RoomStatusType.Active:
+                        @Html.ActionLink("编辑", "Edit", new { id = item.RoomID }, new { @class = "btn btn-xs btn-primary" })
+                        @: | @Html.ActionLink("维护", "Maintain", new { id = item.RoomID }, new { @class = "btn btn-xs btn-warning" })
+                        @: | @Html.ActionLink("删除", "Delete", new { id = item.RoomID }, new { @class = "btn btn-xs btn-danger" })
+                        break;
+                    case RoomStatusType.Maintained:
+                        @: | @Html.ActionLink("恢复可用", "Restore", new { id = item.RoomID }, new { @class = "btn btn-xs btn-success" })
+                        @: | @Html.ActionLink("删除", "Delete", new { id = item.RoomID }, new { @class = "btn btn-xs btn-danger" })
+                        break;
+                    case RoomStatusType.Retired:
+                        @Html.ActionLink("查看", "Details", new { id = item.RoomID }, new { @class = "btn btn-xs btn-primary" })
+                        break;
+                }
+}
+        </td>
+    </tr>
+}
+
+</table>

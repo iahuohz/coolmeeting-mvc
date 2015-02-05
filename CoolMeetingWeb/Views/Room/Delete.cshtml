@@ -1,0 +1,46 @@
+﻿@model CoolMeetingWeb.ViewModels.MeetingsInRoomViewModel
+
+@{
+    ViewBag.Title = "会议室";
+}
+
+<h2>删除会议室</h2>
+<div class="alert alert-info">
+    <label>将会议室设置为"删除"状态，将导致会议室不可用，在该会议室预订的会议也将被取消！</label>
+</div>
+<table class="table">
+    <caption>
+        被取消的会议
+    </caption>
+    <tr>
+        <th>会议名称</th>
+        <th>会议开始时间</th>
+        <th>预定者</th>
+    </tr>
+    @foreach (var item in Model.Meetings)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(m => item.MeetingName)
+            </td>
+            <td>
+                @Html.DisplayFor(m => item.StartTime)
+            </td>
+            <td>
+                @Html.DisplayFor(m => item.Reservationist.EmployeeName)
+            </td>
+        </tr>
+    }
+</table>
+<div class="alert alert-danger">
+    <label>您确实要将该会议室置为"删除"状态吗？会议室删除后将不可恢复!</label>
+</div>
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    @Html.HiddenFor(model => model.MeetingRoom.RoomID)
+
+    <input type="submit" value="确定" class="btn btn-primary" />
+    @Html.ActionLink("取消", "Index", null, new { @class = "btn btn-default" })
+}
+

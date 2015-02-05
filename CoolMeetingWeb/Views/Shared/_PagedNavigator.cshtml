@@ -1,0 +1,19 @@
+﻿@using CoolMeetingWeb.ViewModels
+@model PagedNavigatorViewModel
+
+@if (Model.TotalRows != 0)
+{
+    <ul class="pagination pagination-sm">
+        <li>@Html.ActionLink("<<", "Index", Model.FirstPageUrl)</li>
+        <li>@Html.ActionLink("<", "Index", Model.PreviousPageUrl)</li>
+        <li>
+            @Html.ActionLink(Model.CurrentPageIndex.ToString(), "Index", Model.CurrentPageUrl)
+        </li>
+        <li>@Html.ActionLink(">", "Index", Model.NextPageUrl)</li>
+        <li>@Html.ActionLink(">>", "Index", Model.LastPageUrl)</li>
+        <li>
+            <a href="">共<strong>@Model.TotalPages</strong>页</a>
+        </li>
+    </ul>
+}
+

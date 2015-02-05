@@ -1,0 +1,73 @@
+﻿@using CoolMeetingWeb.ViewModels
+@model MeetingListViewModel
+@{
+    Layout = null;
+}
+
+<label class="label label-success">
+    @{
+        switch(Model.MeetingListType)
+        {
+            case MeetingListTypeDef.Canceled:
+                @: 最近取消
+                break;
+            case MeetingListTypeDef.Reserved:
+                @: 最近预定
+                break;
+            default:
+                @: 最近参加的会议
+                break;
+        }
+    }
+</label>
+<table class="table">
+    <tr>
+        <th>
+            会议名称
+        </th>
+        <th>
+            预计参会人数
+        </th>
+        <th>
+            会议室
+        </th>
+        <th>
+            预计起始时间
+        </th>
+        <th>
+            预计结束时间
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model.Meetings)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.MeetingName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.NumberOfParticipants)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.RoomReserved.RoomCode)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.StartTime)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.EndTime)
+            </td>
+            <td>
+                @Html.ActionLink("会议详情", "Details", new { id = item.MeetingID }, new { @class = "btn btn-xs btn-primary" })
+                @if (Model.MeetingListType == MeetingListTypeDef.Reserved)
+                {
+                    @: |
+                    @Html.ActionLink("撤销预定", "Delete", new { id = item.MeetingID }, new { @class = "btn btn-xs btn-primary" })
+                }
+            </td>
+        </tr>
+    }
+
+</table>
+
